@@ -5,13 +5,15 @@ import { preloadZustandBridge } from 'zutron/preload';
 
 import type { AppState } from './store/types';
 
-export type Channels = 'ipc-example';
+export type Channels = 'ipc-example' | string; // Allow any string for more channels
 
 const electronHandler = {
   ipcRenderer: {
+    // Allow sendMessage to handle any channel
     sendMessage(channel: Channels, ...args: unknown[]) {
       ipcRenderer.send(channel, ...args);
     },
+    // Allow on to handle any channel
     on(channel: Channels, func: (...args: unknown[]) => void) {
       const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
         func(...args);
@@ -21,9 +23,12 @@ const electronHandler = {
         ipcRenderer.removeListener(channel, subscription);
       };
     },
+    // Allow once to handle any channel
     once(channel: Channels, func: (...args: unknown[]) => void) {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
+    // Expose the send method directly for flexibility
+    send: (channel: string, data: unknown) => ipcRenderer.send(channel, data),
   },
   // Add window controls
   windowControls: {

@@ -16,6 +16,36 @@ import { mainZustandBridge } from 'zutron/main';
 import MenuBuilder from './menu';
 import { store } from './store/create';
 import { resolveHtmlPath } from './util';
+import { exec } from 'child_process'; // Import exec or other functions you need
+
+const spokenMessages = new Set(); // Use a Set to store unique messages that have been spoken
+
+function speakText(text: string): void {
+  // Check if the message has already been spoken
+  if (spokenMessages.has(text)) {
+    console.log('Duplicate message detected, skipping speech:', text);
+    return; // Skip if the message has already been spoken
+  }
+
+  // Add the message to the spokenMessages set
+  spokenMessages.add(text);
+  console.log('Text received for speech:', text);
+
+  const escapedText = text.replace(/"/g, '\\"');
+  const command = `say -r 200 "${escapedText}"`;
+
+  exec(command, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing say: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      console.error(`Error output from say: ${stderr}`);
+      return;
+    }
+    console.log(`Speech output: ${stdout}`);
+  });
+}
 
 class AppUpdater {
   constructor() {
@@ -31,6 +61,10 @@ ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
+});
+
+ipcMain.on('speak-text', (event, text: string) => {
+  speakText(text);  // Call the function to speak the text
 });
 
 if (process.env.NODE_ENV === 'production') {

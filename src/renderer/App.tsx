@@ -60,7 +60,7 @@ function Main() {
       {/* Title heading no longer needs drag property since parent is draggable */}
       <Box position="absolute" top={2} left={6}>
         <Heading fontFamily="Garamond, serif" fontWeight="hairline">
-          Agent.exe
+          Agent Smith<br />(⌐■_■)
         </Heading>
       </Box>
 
@@ -74,11 +74,11 @@ function Main() {
           '-webkit-app-region': 'no-drag',
         }}
       >
-        <Link href="https://github.com/corbt/agent.exe" isExternal>
+        {/* <Link href="https://github.com/corbt/agent.exe" isExternal>
           <Button variant="ghost" size="sm" aria-label="GitHub" minW={8} p={0}>
             <FaGithub />
           </Button>
-        </Link>
+        </Link>*/}
         <Button
           size="sm"
           variant="ghost"
@@ -104,7 +104,7 @@ function Main() {
         align="center"
         h="100%"
         w="100%"
-        pt={16}
+        pt={28}
         sx={{
           '& > *': {
             // Make all direct children non-draggable
@@ -161,7 +161,7 @@ function Main() {
                 });
               }}
             />
-            <Box>Full Auto</Box>
+            <Box>Unlimited power</Box>
           </HStack>
           <HStack>
             {running && <Spinner size="sm" color="gray.500" mr={2} />}
@@ -205,7 +205,7 @@ function Main() {
               onClick={running ? () => dispatch('STOP_RUN') : startRun}
               isDisabled={!running && localInstructions?.trim() === ''}
             >
-              {running ? <FaStop /> : "Let's Go"}
+              {running ? <FaStop /> : "Execute"}
             </Button>
           </HStack>
         </HStack>

@@ -8,6 +8,7 @@ export const extractAction = (
   reasoning: string;
   toolId: string;
 } => {
+  //console.log('extractAction:', message);
   const reasoning = message.content
     .filter((content) => content.type === 'text')
     .map((content) => content.text)
